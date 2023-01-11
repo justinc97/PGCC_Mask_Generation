@@ -1,9 +1,9 @@
-Polarisation Fraction of \textit{Planck} Galactic Cold Clumps Analysis Code
+Polarisation Fraction of _Planck_ Galactic Cold Clumps Analysis Code
 =============
 
 This is the analysis code and mask generation code created in parallel with the letter to be submitted to MNRAS: Letters in collaboration with the Simons Observatory.
 
-The analysis notebook steps through processes completed in the letter from cutting the \textit{Planck} Galactic Cold Clump Catalogue to the stacking method and error calculations.
+The analysis notebook steps through processes completed in the letter from cutting the _Planck_ Galactic Cold Clump Catalogue to the stacking method and error calculations.
 
 The mask generation notebook gives an example of generating a full-sky mask of Galactic cold clumps and applying it to a full-sky frequency map.
 

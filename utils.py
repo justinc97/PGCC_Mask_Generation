@@ -72,13 +72,15 @@ def BkgSubtract(m, r, bin_size):
     mask   : Returns the annulus indices as a mask for checking if wanted
     """
     I, P = m
-    I_annulus_mean, mask = BkgAnnulus(I, r, bin_size) #IS THIS A PROBLEM
+    I_annulus_mean, mask = BkgAnnulus(I, r, bin_size) 
     P_annulus_mean, mask = BkgAnnulus(P, r, bin_size)
     I -= I_annulus_mean
     P -= P_annulus_mean
+    I = np.clip(I, a_min = 0, a_max = None) # We are still positive definite so
+    P = np.clip(P, a_min = 0, a_max = None) # we clip 0 as minimum subtraction
     return [I, P], mask
 
-def bootstrap_stack(sample, sample_size, Bkg_Sub = False):
+def bootstrap_stack(sample, sample_size, Bkg_Sub = False, noise = None):
     """
     Function to take all sky patches and perform bootstrapping with replacement.
     Optional setting to perform background subtraction internally or not.
@@ -103,10 +105,30 @@ def bootstrap_stack(sample, sample_size, Bkg_Sub = False):
 
         if Bkg_Sub == True:
             I, P = BkgSubtract(btstp_stacked, 18, 6)[0]
+            for i in range(len(I)):
+                I[i] = np.clip(I[i], a_min = 0, a_max = None)
+            for i in range(len(P)):
+                P[i] = np.clip(P[i], a_min = 0, a_max = None)
             bootstrap_PF_samples = [I,P]
-           
+        elif noise is not None:
+            I, P = btstp_stacked
+            for i in range(len(I)):
+                I[i] = np.clip(I[i], a_min = 0, a_max = None)
+            for i in range(len(P)):
+                P[i] = np.clip(P[i], a_min = 0, a_max = None)
+            I -= noise[0]
+            P -= noise[1]
+            for i in range(len(I)):
+                I[i] = np.clip(I[i], a_min = 0, a_max = None)
+            for i in range(len(P)):
+                P[i] = np.clip(P[i], a_min = 0, a_max = None)
+            bootstrap_PF_samples = [I,P]
         else:
             I, P = btstp_stacked
+            for i in range(len(I)):
+                I[i] = np.clip(I[i], a_min = 0, a_max = None)
+            for i in range(len(P)):
+                P[i] = np.clip(P[i], a_min = 0, a_max = None)
             bootstrap_PF_samples = [I,P]
         bootstraps.append(bootstrap_PF_samples)
     return bootstraps
@@ -184,7 +206,7 @@ def bootstraps2error_bins(bootstrap_bins):
     """
     I_stds, P_stds = [], []
     I_cent, P_cent = [], []
-    for i in range(7):
+    for i in range(len(bootstrap_bins)):
         I_stds_bin, P_stds_bin = [], []
         I_cent_bin, P_cent_bin = [], []
         for j in range(len(bootstrap_bins[0])):
