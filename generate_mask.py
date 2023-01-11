@@ -16,11 +16,7 @@ import healpy as hp
 import numpy as np
 import pandas as pd
 from astropy.table import Table
-import pysm3.units as u
-import matplotlib.pyplot as plt
-import warnings
-warnings.filterwarnings('ignore')
-
+import astropy.units as u
 
 def gaussian_source(theta_set, phi_set, a, b, rot):
     """
